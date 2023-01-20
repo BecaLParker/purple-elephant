@@ -17,7 +17,9 @@ public class Tests
             throw new ArgumentException(
                 "Connection string not found. Store connection string in environment variable PostgreSQLConnectionString.");
         }
+        //TODO: Extract connecting to setup
     }
+    //TODO: Add a teardown to close connection
 
     [Test]
     public async Task testDB_CorrectlySeeded_ShouldContainDoolittleAsAlbum()
@@ -26,6 +28,7 @@ public class Tests
         await using var conn = new NpgsqlConnection(_connString);
         await conn.OpenAsync();
         
+        //TODO: Seed the db as ACT part of test
         // Query for a known value
         await using var cmd = new NpgsqlCommand("SELECT title FROM albums WHERE id = 1", conn);
         await using var reader = await cmd.ExecuteReaderAsync();
