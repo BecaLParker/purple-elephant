@@ -20,7 +20,7 @@ public class Tests
     }
 
     [Test]
-    public async Task testDB_CorrectlySeeded_ShouldContainDoolittleAlbum()
+    public async Task testDB_CorrectlySeeded_ShouldContainDoolittleAsAlbum()
     {
 
         await using var conn = new NpgsqlConnection(_connString);
@@ -33,6 +33,24 @@ public class Tests
         {
             var result = reader.GetString(0);
             result.Should().Be("Doolittle", "that's how I seeded the testDB");
+        }
+    }
+    
+    [Test]
+    public async Task testDB_CorrectlySeeded_ShouldContainPixiesAsArtist()
+    {
+
+        await using var conn = new NpgsqlConnection(_connString);
+        await conn.OpenAsync();
+        
+        //TODO: Seed the db as ACT part of test
+        // Query for a known value
+        await using var cmd = new NpgsqlCommand("SELECT name FROM artists WHERE id = 1", conn);
+        await using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            var result = reader.GetString(0);
+            result.Should().Be("Pixies", "that's how I seeded the testDB");
         }
     }
 }
