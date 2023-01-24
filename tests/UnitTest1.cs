@@ -25,11 +25,16 @@ public class Tests
     public async Task testDB_CorrectlySeeded_ShouldContainDoolittleAsAlbum()
     {
 
+        //Open a connection
         await using var conn = new NpgsqlConnection(_connString);
         await conn.OpenAsync();
         
-        //TODO: Seed the db as ACT part of test
-        // Query for a known value
+        //Execute SQL insert statements from a file 
+        var sqlString = await File.ReadAllTextAsync(@"..\..\..\seeds\music_library.sql", System.Text.Encoding.UTF8);
+        var seedCommand = new NpgsqlCommand(sqlString, conn);
+        seedCommand.ExecuteNonQuery();
+        
+        //Check that a know value is present
         await using var cmd = new NpgsqlCommand("SELECT title FROM albums WHERE id = 1", conn);
         await using var reader = await cmd.ExecuteReaderAsync();
         while (await reader.ReadAsync())
@@ -46,7 +51,6 @@ public class Tests
         await using var conn = new NpgsqlConnection(_connString);
         await conn.OpenAsync();
         
-        //TODO: Seed the db as ACT part of test
         // Query for a known value
         await using var cmd = new NpgsqlCommand("SELECT name FROM artists WHERE id = 1", conn);
         await using var reader = await cmd.ExecuteReaderAsync();
