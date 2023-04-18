@@ -59,5 +59,6 @@ public class Tests
             var result = reader.GetString(0);
             result.Should().Be("Pixies", "that's how I seeded the testDB");
         }
+        //Nonsense commit to check a github process
     }
 }
